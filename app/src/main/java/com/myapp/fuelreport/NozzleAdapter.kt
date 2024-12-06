@@ -1,13 +1,12 @@
+package com.myapp.fuelreport
+
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.myapp.fuelreport.Nozzle
-import com.myapp.fuelreport.R
 
 class NozzleAdapter(
     private val context: Context,

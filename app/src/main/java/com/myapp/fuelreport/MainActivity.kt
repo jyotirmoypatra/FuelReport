@@ -116,7 +116,7 @@ class MainActivity : AppCompatActivity() {
             val month = calendar.get(Calendar.MONTH)
             val day = calendar.get(Calendar.DAY_OF_MONTH)
 
-            val datePickerDialog = DatePickerDialog(this, { _, selectedYear, selectedMonth, selectedDay ->
+            val datePickerDialog = DatePickerDialog(this,  R.style.CustomDatePickerTheme,{ _, selectedYear, selectedMonth, selectedDay ->
                 // Format the date to dd/MM/yyyy
                 val selectedCalendar = Calendar.getInstance()
                 selectedCalendar.set(selectedYear, selectedMonth, selectedDay)
