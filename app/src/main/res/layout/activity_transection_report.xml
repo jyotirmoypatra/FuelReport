@@ -55,12 +55,38 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:orientation="vertical">
-
                     <LinearLayout
+                        android:id="@+id/llHeadingCard"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/side_nav_bar"
                         android:gravity="center"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/_2sdp">
+
+                        <ImageView
+                            android:layout_width="@dimen/_20sdp"
+                            android:layout_height="@dimen/_20sdp"
+                            android:layout_gravity="center"
+                            android:src="@mipmap/currency" />
+
+                        <TextView
+                            android:id="@+id/transactionTypeHeading"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_2sdp"
+                            android:gravity="center"
+                            android:padding="@dimen/_5sdp"
+                            android:text="CASH"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/_14sdp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_marginTop="@dimen/_5sdp"
                         android:orientation="horizontal">
 
                         <TextView
@@ -69,7 +95,7 @@
                             android:gravity="center"
                             android:padding="@dimen/_5sdp"
                             android:text="@string/date"
-                            android:textColor="@color/white"
+                            android:textColor="@color/black"
                             android:textSize="@dimen/_14sdp"
                             android:textStyle="bold" />
 
@@ -81,7 +107,7 @@
                             android:gravity="center"
                             android:padding="@dimen/_5sdp"
                             android:text="@string/date"
-                            android:textColor="@color/white"
+                            android:textColor="@color/black"
                             android:textSize="@dimen/_14sdp"
                             android:textStyle="bold" />
                     </LinearLayout>
@@ -112,7 +138,7 @@
 
                         <TextView
                             android:layout_width="wrap_content"
-                            android:layout_height="50dp"
+                            android:layout_height="40dp"
                             android:gravity="center"
                             android:text="ADD"
                             android:textColor="@color/white"
@@ -150,7 +176,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="center"
-                            android:padding="@dimen/_10sdp"
+                            android:padding="@dimen/_8sdp"
                             android:text="Total Cash  :"
                             android:textColor="@color/white"
                             android:textSize="@dimen/_14sdp"
@@ -162,7 +188,7 @@
                             android:layout_marginStart="@dimen/_5sdp"
                             android:layout_weight="1"
                             android:gravity="center"
-                            android:padding="@dimen/_10sdp"
+                            android:padding="@dimen/_8sdp"
                             android:text="14244"
                             android:textColor="@color/white"
                             android:textSize="@dimen/_14sdp"
@@ -171,7 +197,7 @@
 
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
+                        android:layout_height="45dp"
                         android:layout_margin="@dimen/_10sdp"
                         android:background="@drawable/rounded_btn"
                         android:gravity="center"

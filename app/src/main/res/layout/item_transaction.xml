@@ -15,7 +15,6 @@
         android:hint="Amount"
         android:textColorHint="@color/lightGray"
         android:textSize="@dimen/_13sdp"
-        android:layout_marginRight="@dimen/_5sdp"
         android:textColor="@color/black"
         android:background="@drawable/edit_text"
         android:gravity="center" />
@@ -33,11 +32,12 @@
         android:hint="Notes"
         android:background="@drawable/edit_text" />
 
-    <TextView
+    <ImageView
+        android:id="@+id/deleteRow"
         android:layout_width="@dimen/_30sdp"
         android:layout_height="@dimen/_30sdp"
         android:layout_marginLeft="@dimen/_10sdp"
-        android:layout_marginRight="@dimen/_10sdp"
+
         android:background="@mipmap/delete"
-        android:backgroundTint="@color/red" />
+        android:backgroundTint="#850F07" />
 </LinearLayout>
