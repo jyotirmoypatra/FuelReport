@@ -5,11 +5,11 @@
     android:id="@+id/Transaction_drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".TransectionReportActivity">
+    tools:context=".activity.TransectionReportActivity">
 
     <!-- Main Content -->
     <LinearLayout
-        android:id="@+id/main_content"
+        android:id="@+id/main_content_transaction"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"

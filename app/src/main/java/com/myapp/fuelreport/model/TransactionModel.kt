@@ -1,4 +1,4 @@
-package com.myapp.fuelreport
+package com.myapp.fuelreport.model
 
 data class TransactionModel(
     val amount: String,

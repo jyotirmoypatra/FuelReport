@@ -1,19 +1,19 @@
-package com.myapp.fuelreport
+package com.myapp.fuelreport.activity
 
 import android.graphics.Color
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.myapp.fuelreport.R
+import com.myapp.fuelreport.model.TransactionModel
+import com.myapp.fuelreport.adapter.TransactionAdapter
 
 class TransectionReportActivity : AppCompatActivity() {
     private lateinit var menuBtnTransaction: ImageView
@@ -27,6 +27,7 @@ class TransectionReportActivity : AppCompatActivity() {
     private lateinit var CREDIT: TextView
     private lateinit var DISCOUNT: TextView
     private lateinit var transactionTypeHeading: TextView
+    private lateinit var main_content_transaction: LinearLayout
 
     private var transactionList = mutableListOf<TransactionModel>()
 
@@ -35,7 +36,7 @@ class TransectionReportActivity : AppCompatActivity() {
         supportActionBar?.hide()
         setContentView(R.layout.activity_transection_report)
 
-
+        main_content_transaction = findViewById(R.id.main_content_transaction)
         menuBtnTransaction = findViewById(R.id.menuBtnTransaction)
         Transaction_drawer_layout = findViewById(R.id.Transaction_drawer_layout)
         dateTransaction = findViewById(R.id.dateTransaction)

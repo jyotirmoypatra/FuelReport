@@ -1,4 +1,4 @@
-package com.myapp.fuelreport
+package com.myapp.fuelreport.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -6,8 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.myapp.fuelreport.R
+import com.myapp.fuelreport.model.TransactionModel
 
 class TransactionAdapter(private val context: Context,
                          private val transactionList: MutableList<TransactionModel>) :

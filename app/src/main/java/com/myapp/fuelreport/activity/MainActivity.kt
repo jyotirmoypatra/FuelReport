@@ -1,4 +1,4 @@
-package com.myapp.fuelreport
+package com.myapp.fuelreport.activity
 
 import android.app.DatePickerDialog
 import android.app.Dialog
@@ -7,7 +7,6 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.ViewGroup
-import android.widget.Button
 
 
 import android.widget.ImageView
@@ -19,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ContextThemeWrapper
 
 import androidx.appcompat.widget.PopupMenu
+import com.myapp.fuelreport.R
 import java.util.Calendar
 import java.util.Locale
 
@@ -84,6 +84,12 @@ class MainActivity : AppCompatActivity() {
                 targetActivity = TransectionReportActivity::class.java
             )
         }
+        viewReport.setOnClickListener {
+            showDatePickerDialog(
+                headingText = "Please Select Date For View Report",
+                targetActivity = ViewReportActivity::class.java
+            )
+        }
 
 
     }
@@ -116,7 +122,8 @@ class MainActivity : AppCompatActivity() {
             val month = calendar.get(Calendar.MONTH)
             val day = calendar.get(Calendar.DAY_OF_MONTH)
 
-            val datePickerDialog = DatePickerDialog(this,  R.style.CustomDatePickerTheme,{ _, selectedYear, selectedMonth, selectedDay ->
+            val datePickerDialog = DatePickerDialog(this,
+                R.style.CustomDatePickerTheme,{ _, selectedYear, selectedMonth, selectedDay ->
                 // Format the date to dd/MM/yyyy
                 val selectedCalendar = Calendar.getInstance()
                 selectedCalendar.set(selectedYear, selectedMonth, selectedDay)
@@ -136,6 +143,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         dialog.show() // Show the dialog
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        moveTaskToBack(true)
     }
 
 

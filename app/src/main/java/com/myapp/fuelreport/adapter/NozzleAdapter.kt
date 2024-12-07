@@ -1,4 +1,4 @@
-package com.myapp.fuelreport
+package com.myapp.fuelreport.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.myapp.fuelreport.model.Nozzle
+import com.myapp.fuelreport.R
 
 class NozzleAdapter(
     private val context: Context,
@@ -29,7 +31,9 @@ class NozzleAdapter(
         holder.nozzelName.text = nozzle.name
 
         if (fuelType == "diesel") {  // Example condition for changing background color
-            holder.nozzelName.setBackgroundColor(ContextCompat.getColor(context, R.color.lightYellow))
+            holder.nozzelName.setBackgroundColor(ContextCompat.getColor(context,
+                R.color.lightYellow
+            ))
         } else if(fuelType == "petrol"){
             holder.nozzelName.setBackgroundColor(ContextCompat.getColor(context, R.color.orange))
         }else if(fuelType == "cng"){

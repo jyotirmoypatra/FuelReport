@@ -1,4 +1,4 @@
-package com.myapp.fuelreport
+package com.myapp.fuelreport.activity
 
 import android.graphics.Color
 import android.os.Bundle
@@ -11,6 +11,9 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.myapp.fuelreport.model.Nozzle
+import com.myapp.fuelreport.R
+import com.myapp.fuelreport.adapter.NozzleAdapter
 
 class SalesReportActivity : AppCompatActivity() {
 
@@ -23,6 +26,7 @@ class SalesReportActivity : AppCompatActivity() {
     private lateinit var Petrol: TextView
     private lateinit var CNG: TextView
     private lateinit var dateTextView: TextView
+    private lateinit var main_content: LinearLayout
 
     private var nozzleList = mutableListOf<Nozzle>()
 
@@ -33,6 +37,7 @@ class SalesReportActivity : AppCompatActivity() {
         supportActionBar?.hide()
         setContentView(R.layout.activity_sales_report)
 
+        main_content = findViewById(R.id.main_content)
         menuBtn = findViewById(R.id.menuBtn)
         drawerLayout = findViewById(R.id.drawer_layout)
         nozzelRecyclerView = findViewById(R.id.nozzelRecyclerView)
@@ -55,6 +60,7 @@ class SalesReportActivity : AppCompatActivity() {
                 drawerLayout.closeDrawer(GravityCompat.START)
             } else {
                 drawerLayout.openDrawer(GravityCompat.START)
+
             }
         }
 
