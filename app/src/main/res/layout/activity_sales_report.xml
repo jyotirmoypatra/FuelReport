@@ -271,56 +271,10 @@
             android:textSize="@dimen/_14sdp"
             android:textStyle="bold" />
 
-        <View
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/fuelTypeRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_2sdp"
-            android:background="@color/white" />
-
-        <TextView
-            android:id="@+id/Diesel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/lightGray"
-            android:padding="16dp"
-            android:text="DIESEL"
-            android:textColor="@color/white"
-            android:textSize="@dimen/_13sdp"
-            android:textStyle="bold" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_2sdp"
-            android:background="@color/white" />
-
-        <TextView
-            android:id="@+id/Petrol"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:text="PETROL"
-            android:textColor="@color/white"
-            android:textSize="@dimen/_13sdp"
-            android:textStyle="bold" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_2sdp"
-            android:background="@color/white" />
-
-        <TextView
-            android:id="@+id/CNG"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:text="CNG"
-            android:textColor="@color/white"
-            android:textSize="@dimen/_13sdp"
-            android:textStyle="bold" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_2sdp"
-            android:background="@color/white" />
+            android:layout_height="match_parent"/>
         <!-- Add more menu items here -->
 
     </LinearLayout>

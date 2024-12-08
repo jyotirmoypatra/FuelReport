@@ -1,7 +1,7 @@
 package com.myapp.fuelreport.model
 
 data class Nozzle(
-    val name: String,
-    val status: String
+    val nozzelId: Int,
+    val nozzelName: String
 )
 

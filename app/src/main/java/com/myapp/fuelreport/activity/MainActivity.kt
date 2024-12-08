@@ -6,7 +6,10 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
+import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 
 
 import android.widget.ImageView
@@ -18,7 +21,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ContextThemeWrapper
 
 import androidx.appcompat.widget.PopupMenu
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.google.gson.Gson
 import com.myapp.fuelreport.R
+import com.myapp.fuelreport.Util.ApiService
+import com.myapp.fuelreport.Util.UserService
+import com.myapp.fuelreport.model.Fuel
+import com.myapp.fuelreport.model.FuelList
+import com.myapp.fuelreport.model.getFuelAndTransactiobApiResponse
+import retrofit2.Call
 import java.util.Calendar
 import java.util.Locale
 
@@ -30,6 +41,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var submitTransactionReport: LinearLayout
     private lateinit var viewReport: LinearLayout
     private lateinit var settingIcon: ImageView
+    private var fuelListJson: String = ""
+    private lateinit var progressBarBlockView: FrameLayout
+    private lateinit var swipeRefreshLayout: SwipeRefreshLayout
+    private var isRefreshData : Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,12 +55,29 @@ class MainActivity : AppCompatActivity() {
         submitTransactionReport = findViewById(R.id.submitTransactionReport)
         viewReport = findViewById(R.id.viewReport)
         settingIcon = findViewById(R.id.settingsImgIcon)
+        progressBarBlockView = findViewById(R.id.progressBarBlockView)
+        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout)
+
+        val sharedPreferences = getSharedPreferences("userPrefs", MODE_PRIVATE)
+        val orgId = sharedPreferences.getInt("orgId", -1)
+        if (orgId != -1) {
+            fetchFuelListAndDetails(orgId)
+        }
+
+        swipeRefreshLayout.setOnRefreshListener {
+            // Stop the refreshing animation once done
+            if (orgId != -1) {
+                isRefreshData = true
+                fetchFuelListAndDetails(orgId)
+            }
+            swipeRefreshLayout.isRefreshing = false
+        }
 
 
         settingIcon.setOnClickListener {
-            // Create PopupMenu
 
-            val popupMenu = PopupMenu(ContextThemeWrapper(this, R.style.CustomPopupMenu), settingIcon)
+            val popupMenu =
+                PopupMenu(ContextThemeWrapper(this, R.style.CustomPopupMenu), settingIcon)
             popupMenu.menuInflater.inflate(R.menu.settings_menu, popupMenu.menu)
 
             // Handle menu item clicks
@@ -55,6 +87,7 @@ class MainActivity : AppCompatActivity() {
 
                         true
                     }
+
                     R.id.option2 -> {
                         val intent = Intent(this, LoginActivity::class.java)
                         startActivity(intent)
@@ -68,16 +101,21 @@ class MainActivity : AppCompatActivity() {
 
             // Show the menu
             popupMenu.show()
+
+
         }
 
 
         submitSalesReport.setOnClickListener {
-            showDatePickerDialog(
-                headingText = "Please Select Date For Sales",
-                targetActivity = SalesReportActivity::class.java
-            )
+            if (fuelListJson.isNotEmpty()) {
+                showDatePickerDialog(
+                    headingText = "Please Select Date For Sales",
+                    targetActivity = SalesReportActivity::class.java
+                )
+            } else {
+                Toast.makeText(this, "Unable To Load", Toast.LENGTH_SHORT).show()
+            }
         }
-
         submitTransactionReport.setOnClickListener {
             showDatePickerDialog(
                 headingText = "Please Select Date For Transaction",
@@ -90,6 +128,7 @@ class MainActivity : AppCompatActivity() {
                 targetActivity = ViewReportActivity::class.java
             )
         }
+
 
 
     }
@@ -122,20 +161,27 @@ class MainActivity : AppCompatActivity() {
             val month = calendar.get(Calendar.MONTH)
             val day = calendar.get(Calendar.DAY_OF_MONTH)
 
-            val datePickerDialog = DatePickerDialog(this,
-                R.style.CustomDatePickerTheme,{ _, selectedYear, selectedMonth, selectedDay ->
-                // Format the date to dd/MM/yyyy
-                val selectedCalendar = Calendar.getInstance()
-                selectedCalendar.set(selectedYear, selectedMonth, selectedDay)
+            val datePickerDialog = DatePickerDialog(
+                this,
+                R.style.CustomDatePickerTheme, { _, selectedYear, selectedMonth, selectedDay ->
+                    // Format the date to dd/MM/yyyy
+                    val selectedCalendar = Calendar.getInstance()
+                    selectedCalendar.set(selectedYear, selectedMonth, selectedDay)
 
-                val dateFormat = java.text.SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-                val selectedDate = dateFormat.format(selectedCalendar.time) // Format the date
+                    val dateFormat = java.text.SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+                    val selectedDate = dateFormat.format(selectedCalendar.time) // Format the date
 
-                // Pass the selected date to the next activity
-                val intent = Intent(this, targetActivity)
-                intent.putExtra("selectedDate", selectedDate)
-                startActivity(intent)
-            }, year, month, day)
+                    // Pass the selected date to the next activity
+                    val intent = Intent(this, targetActivity)
+                    intent.putExtra("selectedDate", selectedDate)
+
+                    if (targetActivity == SalesReportActivity::class.java) {
+                        intent.putExtra("fuelListJson", fuelListJson)
+                    }
+                    startActivity(intent)
+
+                }, year, month, day
+            )
 
 
             datePickerDialog.show()
@@ -150,6 +196,44 @@ class MainActivity : AppCompatActivity() {
         moveTaskToBack(true)
     }
 
+    private fun fetchFuelListAndDetails(orgId:Int) {
+
+        progressBarBlockView.visibility = View.VISIBLE
+
+        val userService = ApiService.getUserService()
+
+        userService.getFuelTypesAndDetails(orgId)
+            .enqueue(object : retrofit2.Callback<getFuelAndTransactiobApiResponse> {
+                override fun onResponse(
+                    call: Call<getFuelAndTransactiobApiResponse>,
+                    response: retrofit2.Response<getFuelAndTransactiobApiResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        val content = response.body()
+                        Log.d("api-response", "" + content)
+                        val fuelList = content?.content?.fuelTypes ?: emptyList()
+                        val transactionList = content?.content?.transactionTypes ?: emptyList()
+
+                        // Serialize fuelList to JSON string
+                         fuelListJson = Gson().toJson(fuelList)
+
+                        Log.d("fuel-response", "" + fuelList)
+                        if(isRefreshData){
+                            isRefreshData = false
+                            Toast.makeText(this@MainActivity, "Refresh Data Successfully", Toast.LENGTH_SHORT).show()
+                        }
+
+                    }
+                    progressBarBlockView.visibility = View.GONE
+                }
+
+                override fun onFailure(call: Call<getFuelAndTransactiobApiResponse>, t: Throwable) {
+                    // Handle the error
+                    progressBarBlockView.visibility = View.GONE
+
+                }
+            })
+    }
 
 
 }

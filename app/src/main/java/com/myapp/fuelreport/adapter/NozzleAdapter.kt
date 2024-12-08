@@ -12,7 +12,7 @@ import com.myapp.fuelreport.R
 
 class NozzleAdapter(
     private val context: Context,
-    private val nozzleList: MutableList<Nozzle>) :
+    private var nozzleList: List<Nozzle>) :
     RecyclerView.Adapter<NozzleAdapter.NozzleViewHolder>() {
 
     private var fuelType: String? = null
@@ -28,32 +28,25 @@ class NozzleAdapter(
 
     override fun onBindViewHolder(holder: NozzleViewHolder, position: Int) {
         val nozzle = nozzleList[position]
-        holder.nozzelName.text = nozzle.name
+        holder.nozzelName.text = nozzle.nozzelName
 
-        if (fuelType == "diesel") {  // Example condition for changing background color
-            holder.nozzelName.setBackgroundColor(ContextCompat.getColor(context,
-                R.color.lightYellow
-            ))
-        } else if(fuelType == "petrol"){
-            holder.nozzelName.setBackgroundColor(ContextCompat.getColor(context, R.color.orange))
-        }else if(fuelType == "cng"){
-            holder.nozzelName.setBackgroundColor(ContextCompat.getColor(context, R.color.green))
-        }
+//        if (fuelType == "diesel") {  // Example condition for changing background color
+//            holder.nozzelName.setBackgroundColor(ContextCompat.getColor(context,
+//                R.color.lightYellow
+//            ))
+//        } else if(fuelType == "petrol"){
+//            holder.nozzelName.setBackgroundColor(ContextCompat.getColor(context, R.color.orange))
+//        }else if(fuelType == "cng"){
+//            holder.nozzelName.setBackgroundColor(ContextCompat.getColor(context, R.color.green))
+//        }
 
     }
 
     override fun getItemCount(): Int = nozzleList.size
 
-    fun updateData(newNozzleList: List<Nozzle>, type: String) {
-        // Clear old data
-        nozzleList.clear()
-
-        // Add new data
-        nozzleList.addAll(newNozzleList)
-
-        fuelType = type
-        // Notify the adapter
-        notifyDataSetChanged()
+    fun updateNozzles(newNozzles: List<Nozzle>) {
+        nozzleList = newNozzles
+        notifyDataSetChanged() // Notify the adapter that the data has changed
     }
 
 }

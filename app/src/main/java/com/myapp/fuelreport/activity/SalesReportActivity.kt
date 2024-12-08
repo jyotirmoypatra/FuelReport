@@ -1,36 +1,37 @@
 package com.myapp.fuelreport.activity
 
-import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.myapp.fuelreport.model.Nozzle
 import com.myapp.fuelreport.R
+import com.myapp.fuelreport.adapter.FuelTypeAdapter
 import com.myapp.fuelreport.adapter.NozzleAdapter
+import com.myapp.fuelreport.model.Fuel
 
 class SalesReportActivity : AppCompatActivity() {
 
     private lateinit var menuBtn: ImageView
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var nozzelRecyclerView: RecyclerView
+    private lateinit var fuelTypeRecyclerView: RecyclerView
     private lateinit var fuelTypeHeading: TextView
     private lateinit var llHeadingCard: LinearLayout
-    private lateinit var Diesel: TextView
-    private lateinit var Petrol: TextView
-    private lateinit var CNG: TextView
     private lateinit var dateTextView: TextView
     private lateinit var main_content: LinearLayout
 
-    private var nozzleList = mutableListOf<Nozzle>()
-
-
+    private var nozzleList : List<Nozzle> = emptyList()
+    private var fuelList: List<Fuel> = emptyList()
+    private lateinit var nozzleAdapter: NozzleAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,19 +42,25 @@ class SalesReportActivity : AppCompatActivity() {
         menuBtn = findViewById(R.id.menuBtn)
         drawerLayout = findViewById(R.id.drawer_layout)
         nozzelRecyclerView = findViewById(R.id.nozzelRecyclerView)
+        fuelTypeRecyclerView = findViewById(R.id.fuelTypeRecyclerView)
         fuelTypeHeading = findViewById(R.id.fuelTypeHeading)
         llHeadingCard = findViewById(R.id.llHeadingCard)
         dateTextView = findViewById(R.id.dateTextView)
-
-        Diesel = findViewById(R.id.Diesel)
-        Petrol = findViewById(R.id.Petrol)
-        CNG = findViewById(R.id.CNG)
 
 
         val selectedDate = intent.getStringExtra("selectedDate")
         dateTextView.text = selectedDate ?: "No Date Selected"
 
+        val fuelListJson = intent.getStringExtra("fuelListJson")
 
+        if (!fuelListJson.isNullOrEmpty()) {
+            // Deserialize the JSON string back into a List<Fuel>
+            val fuelListType = object : TypeToken<List<Fuel>>() {}.type
+            fuelList = Gson().fromJson(fuelListJson, fuelListType)
+            Log.d("fuel-list", "Received fuelList: $fuelList")
+        } else {
+            Log.d("fuel-list", "fuelList is empty or null")
+        }
 
         menuBtn.setOnClickListener {
             if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
@@ -65,69 +72,35 @@ class SalesReportActivity : AppCompatActivity() {
         }
 
 
-        // Set up RecyclerView
-        val adapter = NozzleAdapter(this,nozzleList)
+        // Set up RecyclerView Nozzle
+        nozzleAdapter = NozzleAdapter(this, nozzleList)
         nozzelRecyclerView.layoutManager = LinearLayoutManager(this)
-        nozzelRecyclerView.adapter = adapter
+        nozzelRecyclerView.adapter = nozzleAdapter
 
+        // Set up RecyclerView Fuel
+        val fuelAdapter = FuelTypeAdapter(this, fuelList, this)
+        fuelTypeRecyclerView.layoutManager = LinearLayoutManager(this)
+        fuelTypeRecyclerView.adapter = fuelAdapter
 
-
-
-        Diesel.setOnClickListener {
-            fuelTypeHeading.text = "DIESEL"
-
-            Diesel.setBackgroundColor(ContextCompat.getColor(this, R.color.lightGray))
-            Petrol.setBackgroundColor(Color.TRANSPARENT)
-            CNG.setBackgroundColor(Color.TRANSPARENT)
-            drawerLayout.closeDrawer(GravityCompat.START)
-
-            llHeadingCard.setBackgroundColor(ContextCompat.getColor(this, R.color.lightYellow))
-
-            nozzleList = mutableListOf(
-                Nozzle("Nozzle 1", "Active"),
-                Nozzle("Nozzle 2", "Active")
-            )
-
-            adapter.updateData(nozzleList,"diesel")
-
-        }
-        Petrol.setOnClickListener {
-            fuelTypeHeading.text = "PETROL"
-
-            Petrol.setBackgroundColor(ContextCompat.getColor(this, R.color.lightGray))
-            Diesel.setBackgroundColor(Color.TRANSPARENT)
-            CNG.setBackgroundColor(Color.TRANSPARENT)
-            drawerLayout.closeDrawer(GravityCompat.START)
-
-            llHeadingCard.setBackgroundColor(ContextCompat.getColor(this, R.color.orange))
-
-            nozzleList = mutableListOf(
-                Nozzle("Nozzle 1", "Active"),
-                Nozzle("Nozzle 2", "Active"),
-                Nozzle("Nozzle 3", "Active")
-            )
-            adapter.updateData(nozzleList,"petrol")
-        }
-        CNG.setOnClickListener {
-            fuelTypeHeading.text = "CNG"
-
-            CNG.setBackgroundColor(ContextCompat.getColor(this, R.color.lightGray))
-            Petrol.setBackgroundColor(Color.TRANSPARENT)
-            Diesel.setBackgroundColor(Color.TRANSPARENT)
-            drawerLayout.closeDrawer(GravityCompat.START)
-
-            llHeadingCard.setBackgroundColor(ContextCompat.getColor(this, R.color.green))
-            nozzleList = mutableListOf(
-                Nozzle("Nozzle 1", "Active")
-
-            )
-            adapter.updateData(nozzleList,"cng")
-        }
-
-
-        Diesel.performClick()
 
     }
+
+
+    fun onFuelItemClick(fuelId: Long) {
+        Log.d("click-item", "" + fuelId)
+
+        val clickedFuel = fuelList.firstOrNull { it.fuelTypeId == fuelId}
+
+        nozzleList = clickedFuel?.nozzels ?: emptyList()
+//        nozzleAdapter.notifyDataSetChanged()
+        nozzleAdapter.updateNozzles(nozzleList)
+
+        fuelTypeHeading.text = clickedFuel?.name
+
+        drawerLayout.closeDrawer(GravityCompat.START)
+
+    }
+
 
     override fun onBackPressed() {
         super.onBackPressed()
