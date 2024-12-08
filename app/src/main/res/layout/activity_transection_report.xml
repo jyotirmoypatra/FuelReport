@@ -240,82 +240,13 @@
             android:layout_height="@dimen/_2sdp"
             android:background="@color/white" />
 
-        <TextView
-            android:id="@+id/CASH"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewTransactionType"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/lightGray"
-            android:padding="16dp"
-            android:text="CASH"
-            android:textColor="@color/white"
-            android:textSize="@dimen/_13sdp"
-            android:textStyle="bold" />
+            android:layout_height="match_parent"/>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_2sdp"
-            android:background="@color/white" />
 
-        <TextView
-            android:id="@+id/UPI"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:text="UPI"
-            android:textColor="@color/white"
-            android:textSize="@dimen/_13sdp"
-            android:textStyle="bold" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_2sdp"
-            android:background="@color/white" />
-
-        <TextView
-            android:id="@+id/CARD"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:text="CARD"
-            android:textColor="@color/white"
-            android:textSize="@dimen/_13sdp"
-            android:textStyle="bold" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_2sdp"
-            android:background="@color/white" />
-
-        <TextView
-            android:id="@+id/CREDIT"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:text="CREDIT"
-            android:textColor="@color/white"
-            android:textSize="@dimen/_13sdp"
-            android:textStyle="bold" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_2sdp"
-            android:background="@color/white" />
-
-        <TextView
-            android:id="@+id/DISCOUNT"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:text="DISCOUNT"
-            android:textColor="@color/white"
-            android:textSize="@dimen/_13sdp"
-            android:textStyle="bold" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_2sdp"
-            android:background="@color/white" />
-        <!-- Add more menu items here -->
 
     </LinearLayout>
 

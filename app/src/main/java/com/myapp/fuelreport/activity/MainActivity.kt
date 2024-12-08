@@ -42,6 +42,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var viewReport: LinearLayout
     private lateinit var settingIcon: ImageView
     private var fuelListJson: String = ""
+    private var transactionTypeListJson: String = ""
     private lateinit var progressBarBlockView: FrameLayout
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     private var isRefreshData : Boolean = false
@@ -113,14 +114,18 @@ class MainActivity : AppCompatActivity() {
                     targetActivity = SalesReportActivity::class.java
                 )
             } else {
-                Toast.makeText(this, "Unable To Load", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Unable To Load Sales Data.Please Swipe down to Refresh..", Toast.LENGTH_SHORT).show()
             }
         }
         submitTransactionReport.setOnClickListener {
-            showDatePickerDialog(
-                headingText = "Please Select Date For Transaction",
-                targetActivity = TransectionReportActivity::class.java
-            )
+            if(transactionTypeListJson.isNotEmpty()){
+                showDatePickerDialog(
+                    headingText = "Please Select Date For Transaction",
+                    targetActivity = TransectionReportActivity::class.java
+                )
+            }else{
+                Toast.makeText(this, "Unable To Load Transaction Data.Please Swipe down to Refresh..", Toast.LENGTH_SHORT).show()
+            }
         }
         viewReport.setOnClickListener {
             showDatePickerDialog(
@@ -177,6 +182,8 @@ class MainActivity : AppCompatActivity() {
 
                     if (targetActivity == SalesReportActivity::class.java) {
                         intent.putExtra("fuelListJson", fuelListJson)
+                    }else if(targetActivity == TransectionReportActivity::class.java){
+                        intent.putExtra("transactionTypeListJson", transactionTypeListJson)
                     }
                     startActivity(intent)
 
@@ -214,8 +221,9 @@ class MainActivity : AppCompatActivity() {
                         val fuelList = content?.content?.fuelTypes ?: emptyList()
                         val transactionList = content?.content?.transactionTypes ?: emptyList()
 
-                        // Serialize fuelList to JSON string
+                        // Serialize  JSON string
                          fuelListJson = Gson().toJson(fuelList)
+                        transactionTypeListJson = Gson().toJson(transactionList)
 
                         Log.d("fuel-response", "" + fuelList)
                         if(isRefreshData){

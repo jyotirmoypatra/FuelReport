@@ -11,25 +11,28 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.myapp.fuelreport.R
+import com.myapp.fuelreport.adapter.FuelTypeAdapter
 import com.myapp.fuelreport.model.TransactionModel
 import com.myapp.fuelreport.adapter.TransactionAdapter
+import com.myapp.fuelreport.adapter.TransactionTypeAdapter
+import com.myapp.fuelreport.model.Fuel
+import com.myapp.fuelreport.model.TransactionType
 
 class TransectionReportActivity : AppCompatActivity() {
     private lateinit var menuBtnTransaction: ImageView
     private lateinit var Transaction_drawer_layout: DrawerLayout
     private lateinit var dateTransaction: TextView
     private lateinit var recyclerTransaction: RecyclerView
+    private lateinit var recyclerViewTransactionType: RecyclerView
     private lateinit var addBtn: LinearLayout
-    private lateinit var CASH: TextView
-    private lateinit var UPI: TextView
-    private lateinit var CARD: TextView
-    private lateinit var CREDIT: TextView
-    private lateinit var DISCOUNT: TextView
     private lateinit var transactionTypeHeading: TextView
     private lateinit var main_content_transaction: LinearLayout
 
     private var transactionList = mutableListOf<TransactionModel>()
+    private var transactionTypeList: List<TransactionType> = emptyList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,17 +44,22 @@ class TransectionReportActivity : AppCompatActivity() {
         Transaction_drawer_layout = findViewById(R.id.Transaction_drawer_layout)
         dateTransaction = findViewById(R.id.dateTransaction)
         recyclerTransaction = findViewById(R.id.recyclerTransaction)
+        recyclerViewTransactionType = findViewById(R.id.recyclerViewTransactionType)
         addBtn = findViewById(R.id.addBtn)
-        CASH = findViewById(R.id.CASH)
-        UPI = findViewById(R.id.UPI)
-        CARD = findViewById(R.id.CARD)
-        CREDIT = findViewById(R.id.CREDIT)
-        DISCOUNT = findViewById(R.id.DISCOUNT)
         transactionTypeHeading = findViewById(R.id.transactionTypeHeading)
 
 
         val selectedDate = intent.getStringExtra("selectedDate")
         dateTransaction.text = selectedDate ?: "No Date Selected"
+
+        val transactionTypeListJson = intent.getStringExtra("transactionTypeListJson")
+        if (!transactionTypeListJson.isNullOrEmpty()) {
+            // Use Gson to parse the JSON string
+            val gson = Gson()
+            val listType = object : TypeToken<List<TransactionType>>() {}.type
+             transactionTypeList = gson.fromJson(transactionTypeListJson, listType)
+
+        }
 
         menuBtnTransaction.setOnClickListener {
             if (Transaction_drawer_layout.isDrawerOpen(GravityCompat.START)) {
@@ -71,6 +79,12 @@ class TransectionReportActivity : AppCompatActivity() {
         recyclerTransaction.adapter = adapter
 
 
+        // Set up RecyclerView Fuel
+        val transactionTypeAdapter = TransactionTypeAdapter(this, transactionTypeList)
+        recyclerViewTransactionType.layoutManager = LinearLayoutManager(this)
+        recyclerViewTransactionType.adapter = transactionTypeAdapter
+
+
         addBtn.setOnClickListener {
             // Add a new item to the transaction list
             transactionList.add(TransactionModel("New Item", "Description"))
@@ -82,56 +96,17 @@ class TransectionReportActivity : AppCompatActivity() {
 
 
         ///side menu action
-        CASH.setOnClickListener {
-            transactionTypeHeading.text = "CASH"
-            Transaction_drawer_layout.closeDrawer(GravityCompat.START)
+//        CASH.setOnClickListener {
+//            transactionTypeHeading.text = "CASH"
+//            Transaction_drawer_layout.closeDrawer(GravityCompat.START)
+//
+//            CASH.setBackgroundColor(ContextCompat.getColor(this, R.color.lightGray))
+//            CARD.setBackgroundColor(Color.TRANSPARENT)
+//            UPI.setBackgroundColor(Color.TRANSPARENT)
+//            CREDIT.setBackgroundColor(Color.TRANSPARENT)
+//            DISCOUNT.setBackgroundColor(Color.TRANSPARENT)
+//
+//        }
 
-            CASH.setBackgroundColor(ContextCompat.getColor(this, R.color.lightGray))
-            CARD.setBackgroundColor(Color.TRANSPARENT)
-            UPI.setBackgroundColor(Color.TRANSPARENT)
-            CREDIT.setBackgroundColor(Color.TRANSPARENT)
-            DISCOUNT.setBackgroundColor(Color.TRANSPARENT)
-
-        }
-        CARD.setOnClickListener {
-            transactionTypeHeading.text = "CARD"
-            Transaction_drawer_layout.closeDrawer(GravityCompat.START)
-
-            CARD.setBackgroundColor(ContextCompat.getColor(this, R.color.lightGray))
-            CASH.setBackgroundColor(Color.TRANSPARENT)
-            UPI.setBackgroundColor(Color.TRANSPARENT)
-            CREDIT.setBackgroundColor(Color.TRANSPARENT)
-            DISCOUNT.setBackgroundColor(Color.TRANSPARENT)
-        }
-        UPI.setOnClickListener {
-            transactionTypeHeading.text = "UPI"
-            Transaction_drawer_layout.closeDrawer(GravityCompat.START)
-
-            UPI.setBackgroundColor(ContextCompat.getColor(this, R.color.lightGray))
-            CASH.setBackgroundColor(Color.TRANSPARENT)
-            CARD.setBackgroundColor(Color.TRANSPARENT)
-            CREDIT.setBackgroundColor(Color.TRANSPARENT)
-            DISCOUNT.setBackgroundColor(Color.TRANSPARENT)
-        }
-        CREDIT.setOnClickListener {
-            transactionTypeHeading.text = "CREDIT"
-            Transaction_drawer_layout.closeDrawer(GravityCompat.START)
-
-            CREDIT.setBackgroundColor(ContextCompat.getColor(this, R.color.lightGray))
-            CASH.setBackgroundColor(Color.TRANSPARENT)
-            CARD.setBackgroundColor(Color.TRANSPARENT)
-            UPI.setBackgroundColor(Color.TRANSPARENT)
-            DISCOUNT.setBackgroundColor(Color.TRANSPARENT)
-        }
-        DISCOUNT.setOnClickListener {
-            transactionTypeHeading.text = "DISCOUNT"
-            Transaction_drawer_layout.closeDrawer(GravityCompat.START)
-
-            DISCOUNT.setBackgroundColor(ContextCompat.getColor(this, R.color.lightGray))
-            CASH.setBackgroundColor(Color.TRANSPARENT)
-            CARD.setBackgroundColor(Color.TRANSPARENT)
-            UPI.setBackgroundColor(Color.TRANSPARENT)
-            CREDIT.setBackgroundColor(Color.TRANSPARENT)
-        }
     }
 }

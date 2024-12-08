@@ -57,7 +57,6 @@ class SalesReportActivity : AppCompatActivity() {
             // Deserialize the JSON string back into a List<Fuel>
             val fuelListType = object : TypeToken<List<Fuel>>() {}.type
             fuelList = Gson().fromJson(fuelListJson, fuelListType)
-            Log.d("fuel-list", "Received fuelList: $fuelList")
         } else {
             Log.d("fuel-list", "fuelList is empty or null")
         }
@@ -92,7 +91,6 @@ class SalesReportActivity : AppCompatActivity() {
         val clickedFuel = fuelList.firstOrNull { it.fuelTypeId == fuelId}
 
         nozzleList = clickedFuel?.nozzels ?: emptyList()
-//        nozzleAdapter.notifyDataSetChanged()
         nozzleAdapter.updateNozzles(nozzleList)
 
         fuelTypeHeading.text = clickedFuel?.name
