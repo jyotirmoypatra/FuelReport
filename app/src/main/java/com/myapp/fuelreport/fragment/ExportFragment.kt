@@ -18,6 +18,8 @@ import java.util.Locale
 class ExportFragment : Fragment() {
 
     private var date: String? = null
+    private lateinit var txtStartDate: TextView
+    private lateinit var txtEndDate: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,8 +37,8 @@ class ExportFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_export, container, false)
 
-        val txtStartDate: TextView = view.findViewById(R.id.txtStartDate)
-        val txtEndDate: TextView = view.findViewById(R.id.txtEndDate)
+         txtStartDate = view.findViewById(R.id.txtStartDate)
+         txtEndDate = view.findViewById(R.id.txtEndDate)
         val startDateCard: CardView = view.findViewById(R.id.startDateCard)
         val endDateCard: CardView = view.findViewById(R.id.endDateCard)
 
@@ -76,7 +78,14 @@ class ExportFragment : Fragment() {
                 val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
                 val selectedDate = dateFormat.format(selectedCalendar.time) // Format the date
 
-                selectedTextView.text = selectedDate
+
+                if (selectedTextView == txtStartDate) {
+                    selectedTextView.text = getString(R.string.start_date_text, selectedDate)
+                } else if (selectedTextView == txtEndDate) {
+                    selectedTextView.text = getString(R.string.end_date_text, selectedDate)
+                }
+
+
 
             }, year, month, day)
 

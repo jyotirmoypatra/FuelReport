@@ -16,7 +16,7 @@ object ApiService {
             .build()
 
         return Retrofit.Builder()
-            .baseUrl("https://fd04-103-176-117-126.ngrok-free.app/")
+            .baseUrl("https://a33d-103-94-84-22.ngrok-free.app/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(okHttpClient)
             .build()

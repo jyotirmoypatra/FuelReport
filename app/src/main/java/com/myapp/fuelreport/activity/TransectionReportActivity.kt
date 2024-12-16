@@ -2,6 +2,7 @@ package com.myapp.fuelreport.activity
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -80,7 +81,7 @@ class TransectionReportActivity : AppCompatActivity() {
 
 
         // Set up RecyclerView Fuel
-        val transactionTypeAdapter = TransactionTypeAdapter(this, transactionTypeList)
+        val transactionTypeAdapter = TransactionTypeAdapter(this, transactionTypeList,this)
         recyclerViewTransactionType.layoutManager = LinearLayoutManager(this)
         recyclerViewTransactionType.adapter = transactionTypeAdapter
 
@@ -95,18 +96,16 @@ class TransectionReportActivity : AppCompatActivity() {
         }
 
 
-        ///side menu action
-//        CASH.setOnClickListener {
-//            transactionTypeHeading.text = "CASH"
-//            Transaction_drawer_layout.closeDrawer(GravityCompat.START)
-//
-//            CASH.setBackgroundColor(ContextCompat.getColor(this, R.color.lightGray))
-//            CARD.setBackgroundColor(Color.TRANSPARENT)
-//            UPI.setBackgroundColor(Color.TRANSPARENT)
-//            CREDIT.setBackgroundColor(Color.TRANSPARENT)
-//            DISCOUNT.setBackgroundColor(Color.TRANSPARENT)
-//
-//        }
+
+    }
+
+    fun onFuelItemClick(fuelId: Int,name:String) {
+        Log.d("click-item", "" + fuelId)
+
+
+        transactionTypeHeading.text = name
+
+        Transaction_drawer_layout.closeDrawer(GravityCompat.START)
 
     }
 }

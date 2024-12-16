@@ -16,6 +16,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ContextThemeWrapper
@@ -90,6 +91,7 @@ class MainActivity : AppCompatActivity() {
                     }
 
                     R.id.option2 -> {
+                        clearSharedPreferences()
                         val intent = Intent(this, LoginActivity::class.java)
                         startActivity(intent)
                         Toast.makeText(this, "Logout Successfully", Toast.LENGTH_SHORT).show()
@@ -114,7 +116,7 @@ class MainActivity : AppCompatActivity() {
                     targetActivity = SalesReportActivity::class.java
                 )
             } else {
-                Toast.makeText(this, "Unable To Load Sales Data.Please Swipe down to Refresh..", Toast.LENGTH_SHORT).show()
+                showAlert("Opps!", "Unable To Load Sales Data.Please Swipe down to Refresh..")
             }
         }
         submitTransactionReport.setOnClickListener {
@@ -124,7 +126,7 @@ class MainActivity : AppCompatActivity() {
                     targetActivity = TransectionReportActivity::class.java
                 )
             }else{
-                Toast.makeText(this, "Unable To Load Transaction Data.Please Swipe down to Refresh..", Toast.LENGTH_SHORT).show()
+                showAlert("Opps!", "Unable To Load Transaction Data.Please Swipe down to Refresh..")
             }
         }
         viewReport.setOnClickListener {
@@ -222,7 +224,7 @@ class MainActivity : AppCompatActivity() {
                         val transactionList = content?.content?.transactionTypes ?: emptyList()
 
                         // Serialize  JSON string
-                         fuelListJson = Gson().toJson(fuelList)
+                        fuelListJson = Gson().toJson(fuelList)
                         transactionTypeListJson = Gson().toJson(transactionList)
 
                         Log.d("fuel-response", "" + fuelList)
@@ -241,6 +243,23 @@ class MainActivity : AppCompatActivity() {
 
                 }
             })
+    }
+
+    fun clearSharedPreferences() {
+        val sharedPreferences = getSharedPreferences("userPrefs", MODE_PRIVATE)
+        sharedPreferences.edit().clear().apply()
+    }
+
+
+    private fun showAlert(title: String, message: String) {
+        AlertDialog.Builder(this)
+            .setTitle(title)
+            .setMessage(message)
+            .setPositiveButton("OK") { dialog, _ ->
+                dialog.dismiss() // Dismiss the dialog when the user clicks OK
+            }
+            .setCancelable(false)
+            .show()
     }
 
 
